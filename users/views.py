@@ -104,7 +104,7 @@ class FarmViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = Farm.objects.all()
         serializer = FarmSerializer(queryset, many=True)
-        return Response(serializer.data,safe = False, status=status.HTTP_200_OK)
+        return Response(serializer.data,safe=False, status=status.HTTP_200_OK)
     
     def destroy(self, request, pk):
         try:
