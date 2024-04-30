@@ -73,6 +73,6 @@ router.register(r'business', BusinessViewSet, basename='business')
 urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/', admin.site.urls),
-    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='docs-swagger-ui'),  # Changed the name to avoid conflict
     path('api/', include(router.urls)),
 ]
