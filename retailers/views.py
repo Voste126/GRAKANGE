@@ -1,11 +1,12 @@
 # Create your views here.
 ## class based views for customers
-from rest_framework import viewsets
+from rest_framework import viewsets,status
 from .models import Business, Customer
 from .serializers import BusinessSerializer, CustomerSerializer
 from django.http import JsonResponse
 from drf_yasg.utils import swagger_auto_schema  
 from drf_yasg import openapi
+from rest_framework.response import Response
 
 
 class CustomerViewSet(viewsets.ViewSet):
@@ -16,9 +17,9 @@ class CustomerViewSet(viewsets.ViewSet):
             serializer = CustomerSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return JsonResponse(serializer.data, status=201)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
             print(serializer.errors)
-            return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(manual_parameters=[
         openapi.Parameter('id', openapi.IN_PATH, description="ID of the customer", type=openapi.TYPE_INTEGER)
@@ -27,40 +28,40 @@ class CustomerViewSet(viewsets.ViewSet):
         try:
             customer = Customer.objects.get(pk=pk)
         except Customer.DoesNotExist:
-            return JsonResponse({'error': 'Customer not found'}, status=404)
+            return Response({'error': 'Customer not found'}, status=status.HTTP_404_NOT_FOUND)
         
         if request.method == 'GET':
             serializer = CustomerSerializer(customer)
-            return JsonResponse(serializer.data, status=200)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(request_body=CustomerSerializer)
     def update(self, request, pk):
         try:
             customer = Customer.objects.get(pk=pk)
         except Customer.DoesNotExist:
-            return JsonResponse({'error': 'Customer not found'}, status=404)
+            return Response({'error': 'Customer not found'}, status=status.HTTP_404_NOT_FOUND)
         
         if request.method == 'PUT':
             serializer = CustomerSerializer(customer, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return JsonResponse(serializer.data, status=200)
-            return JsonResponse(serializer.errors, status=400)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request):
         queryset = Customer.objects.all()
         serializer = CustomerSerializer(queryset, many=True)
-        return JsonResponse(serializer.data,safe=False,status=200)
+        return Response(serializer.data,safe=False,status=status.HTTP_200_OK)
 
     def destroy(self, request, pk):
         try:
             customer = Customer.objects.get(pk=pk)
         except Customer.DoesNotExist:
-            return JsonResponse({'error': 'Customer not found'}, status=404)
+            return Response({'error': 'Customer not found'}, status=status.HTTP_404_NOT_FOUND)
         
         if request.method == 'DELETE':
             customer.delete()
-            return JsonResponse({'message': 'Customer deleted successfully'}, status=204)
+            return Response({'message': 'Customer deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
         
 
 class BusinessViewSet(viewsets.ViewSet):
@@ -70,9 +71,9 @@ class BusinessViewSet(viewsets.ViewSet):
             serializer = BusinessSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return JsonResponse(serializer.data, status=201)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
             print(serializer.errors)
-            return JsonResponse(serializer.errors, status=400)
+            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(manual_parameters=[
         openapi.Parameter('id', openapi.IN_PATH, description="ID of the customer", type=openapi.TYPE_INTEGER)
@@ -81,37 +82,37 @@ class BusinessViewSet(viewsets.ViewSet):
         try:
             business = Business.objects.get(pk=pk)
         except Business.DoesNotExist:
-            return JsonResponse({'error': 'Business not found'}, status=404)
+            return Response({'error': 'Business not found'}, status=status.HTTP_404_NOT_FOUND)
         
         if request.method == 'GET':
             serializer = BusinessSerializer(business)
-            return JsonResponse(serializer.data, status=200)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(request_body=BusinessSerializer)
     def update(self, request, pk):
         try:
             business = Business.objects.get(pk=pk)
         except Business.DoesNotExist:
-            return JsonResponse({'error': 'Business not found'}, status=404)
+            return Response({'error': 'Business not found'}, status=status.HTTP_404_NOT_FOUND)
         
         if request.method == 'PUT':
             serializer = BusinessSerializer(business, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return JsonResponse(serializer.data, status=200)
-            return JsonResponse(serializer.errors, status=400)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request):
         queryset = Business.objects.all()
         serializer = BusinessSerializer(queryset, many=True)
-        return JsonResponse(serializer.data,safe=False,status=200)
+        return Response(serializer.data,safe=False,status=status.HTTP_200_OK)
 
     def destroy(self, request, pk):
         try:
             business = Business.objects.get(pk=pk)
         except Business.DoesNotExist:
-            return JsonResponse({'error': 'Business not found'}, status=404)
+            return Response({'error': 'Business not found'}, status=status.HTTP_404_NOT_FOUND)
         
         if request.method == 'DELETE':
             business.delete()
-            return JsonResponse({'message': 'Business deleted successfully'}, status=204)
+            return Response({'message': 'Business deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
