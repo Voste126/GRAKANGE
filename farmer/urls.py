@@ -43,7 +43,7 @@ urlpatterns = [
     path('', include('users.urls')),
     path('',include('retailers.urls')),
     path('', include([
-        path('', include(router.urls)),
-        path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+        path('v1/', include(router.urls)),
+        path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     ])),
 ]
